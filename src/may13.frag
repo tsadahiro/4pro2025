@@ -10,8 +10,16 @@ float sdfSphere(vec3 pt, vec3 c, float r){
     return length(pt-c)-r;
 }
 
+float smin( float a, float b, float k )
+{
+    k *= 4.0;
+    float h = max( k-abs(a-b), 0.0 )/k;
+    return min(a,b) - h*h*k*(1.0/4.0);
+}
+
 float sdf(vec3 pt){
-    return sdfSphere(pt, vec3(0.0,0.0,0.0), radius);
+    return smin(sdfSphere(pt, vec3(0.0,0.0,0.0), radius),
+            sdfSphere(pt, vec3(0.0,0.7,0.7), 0.3),0.05);
 }
 
 vec3 rayStep(vec3 pt, vec3 ray){
@@ -41,7 +49,7 @@ void main(){
     vec2 p = gl_FragCoord.xy / u_resolution.x;
     p = 2.0*p - 1.0;
 
-    vec3 light = vec3(0.0,100.0,100.0);
+    vec3 light = vec3(0.0,0.0,100.0);
     vec3 camera = vec3(0.0, 0.0, 10.0);
     vec3 cdir = vec3(0.0, 0.0, -1.0);
     vec3 updir = vec3(0.0, 1.0, 0.0);
