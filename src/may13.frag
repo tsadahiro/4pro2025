@@ -16,6 +16,8 @@ float smin( float a, float b, float k )
 }
 
 float sdfSphere(vec3 pt, vec3 c, float r){
+    //pt = fract(pt);
+    //pt -= 0.5;
     return length(pt-c)-r;
 }
 
@@ -28,6 +30,7 @@ float sdf(vec3 pt){
     float d2 = sdfSphere(pt, vec3(0.0, 0.0, 0.0), 0.2*radius);
     float d3 = sdfPlane(pt, vec3(0.0, 0.0, 1.0), wallZ);
     return smin(smin(d1,d2,0.01), d3, 0.01);
+    //return smin(d2, d3, 0.01);
 }
 
 vec3 rayStep(vec3 pt, vec3 ray){
